@@ -29,7 +29,7 @@ development:
   redis:
     host: "localhost"
     port: "6379"
-    pool_size: "55" # Needs to be more than the pool size for Sidekiq
+    pool_size: "55" # Needs to be set higher than the pool size for Sidekiq
     session_key: "_app_session"
     password: "" # If password is set, it has to end with @ for string concatenation to work properly
     namespace: "app_namespace"
@@ -42,7 +42,7 @@ development:
   memcached:
     host: "localhost"
     port: "11211"
-    pool_size: "55"
+    pool_size: "55" # Needs to be set higher than the pool size for Sidekiq
     namespace: "app_namespace"
     session_key: "_app_session"
   
