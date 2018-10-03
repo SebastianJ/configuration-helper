@@ -22,7 +22,35 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Your config/credentials.yml.enc file is expected to have a structure similar to the following:
+
+```yaml
+development:
+  redis:
+    host: "localhost"
+    port: "6379"
+    pool_size: "55" # Needs to be more than the pool size for Sidekiq
+    session_key: "_app_session"
+    password: "" # If password is set, it has to end with @ for string concatenation to work properly
+    namespace: "app_namespace"
+    namespace_environments: "development,test" # Namespacing will only be enabled for the defined environments, namespacing is not recommended for production use
+    session_database: "0"
+    sidekiq_database: "1"
+    action_cable_database: "2"
+    cache_database: "3"
+  
+  memcached:
+    host: "localhost"
+    port: "11211"
+    pool_size: "55"
+    namespace: "app_namespace"
+    session_key: "_app_session"
+  
+  sidekiq:
+    web:
+      username: "admin"
+      password: "admin"
+```
 
 ## Development
 
