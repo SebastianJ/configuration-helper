@@ -3,7 +3,7 @@ module Configuration
     class Memcached
     
       def self.config_variable(var)
-        Rails.application.credentials[Rails.env.to_sym][:memcached][var]
+        ::Configuration::Helper::Utility.config_variable(var, group: :memcached)
       end
     
       def self.configure_sessions(session_key: config_variable(:session_key), expire_after: 30.minutes)

@@ -1,9 +1,9 @@
 module Configuration
   module Helper
     class Redis
-    
+      
       def self.config_variable(var)
-        Rails.application.credentials[Rails.env.to_sym][:redis][var]
+        ::Configuration::Helper::Utility.config_variable(var, group: :redis)
       end
     
       def self.redis_url(database:, include_namespace: true)
@@ -51,7 +51,7 @@ module Configuration
         end
       end
     
-      def self.configure_sidekiq_instance(type: :server, database: config_variable(:sidekiq_database).to_i, pool_size: 50, namespace: config_variable(:namespace))
+      def self.configure_sidekiq_instance(type: :server, database: config_variable(:sidekiq_database).to_i, pool_size: ::Configuration::Helper::Utility.config_variable(:pool_size, group: :sidekiq, default: 50), namespace: config_variable(:namespace))
         options   =   {
           url:  self.redis_url(database: database, include_namespace: false),
           size: pool_size,

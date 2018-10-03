@@ -47,6 +47,8 @@ development:
     session_key: "_app_session"
   
   sidekiq:
+    pool_size: 50
+  
     web:
       username: "admin"
       password: "admin"
