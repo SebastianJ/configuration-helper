@@ -52,7 +52,7 @@ module Configuration
           end
         end
     
-        def configure_sidekiq_instance(type: :server, database: config_variable(:sidekiq_database).to_i, pool_size: ::Configuration::Helper::Utility.config_variable(:sidekiq, :pool_size, default: 50), namespace: config_variable(:namespace))
+        def configure_sidekiq_instance(type: :server, database: config_variable(:sidekiq_database).to_i, pool_size: config_variable(:pool_size).to_i, namespace: config_variable(:namespace))
           options   =   {
             url:  redis_url(database: database, include_namespace: false),
             size: pool_size,
