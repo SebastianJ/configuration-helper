@@ -47,6 +47,27 @@ development:
     session_key: "_app_session"
 ```
 
+### Redis configuration
+To configure Redis to be used for sessions + job storage for Sidekiq:
+
+Create an initializer, e.g. config/initializers/redis.rb:
+
+```ruby
+::Configuration::Helper::Redis.configure_sessions
+::Configuration::Helper::Redis.configure_sidekiq
+```
+
+### Memcached configuration
+If you want to use Memcached for caching then the caching setup needs to happen in config/environments/{environment}.rb
+
+If done via an initializer Rails won't set up the caching functionality properly.
+
+For each environment where caching using Memcached should be used:
+
+```ruby
+Rails.application.config.cache_store = :dalli_store, ::Configuration::Helper::Memcached.config_variable(:host), ::Configuration::Helper::Memcached.generate_cache_configuration
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
