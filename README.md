@@ -1,8 +1,8 @@
 # Configuration::Helper
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/configuration/helper`. To experiment with that code, run `bin/console` for an interactive prompt.
+Configuration::Helper is just a collection of configuration helpers I tend to use for Rails app when setting up Redis, Memcached, Sidekiq etc.
 
-TODO: Delete this and the text above, and describe your gem
+It relies on the new Rails 5.2 credentials feature where it expects to find the relevant connection details / settings.
 
 ## Installation
 
@@ -32,7 +32,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/configuration-helper. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/SebastianJ/configuration-helper. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
@@ -40,4 +40,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Configuration::Helper project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/configuration-helper/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Configuration::Helper project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/SebastianJ/configuration-helper/blob/master/CODE_OF_CONDUCT.md).
