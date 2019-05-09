@@ -2,7 +2,7 @@
 
 Configuration::Helper is just a collection of configuration helpers I tend to use for Rails app when setting up Redis, Memcached, Sidekiq etc.
 
-It relies on the new Rails 5.2 credentials feature where it expects to find the relevant connection details / settings.
+It relies on the new Rails 5.2+ credentials feature where it expects to find the relevant connection details / settings.
 
 ## Installation
 
@@ -32,8 +32,6 @@ development:
     pool_size: "55" # If Sidekiq is going to be used, this setting needs to be set higher than the concurrency setting in config/sidekiq.yml
     session_key: "_app_session"
     password: "" # If password is set, it has to end with @ for string concatenation to work properly
-    namespace: "app_namespace"
-    namespace_environments: "development,test" # Namespacing will only be enabled for the defined environments, namespacing is not recommended for production use
     session_database: "0"
     sidekiq_database: "1"
     action_cable_database: "2"
