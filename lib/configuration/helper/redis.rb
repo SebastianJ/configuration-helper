@@ -6,23 +6,24 @@ module Configuration
         def config_variable(var, default: nil)
           ::Configuration::Helper::Utility.config_variable(:redis, var, default: default)
         end
+        
+        def connection_options(database: nil)
+          options               =   {}
+          options[:host]        =   config_variable(:host)                      unless config_variable(:host).to_s.empty?
+          options[:port]        =   config_variable(:port)                      unless config_variable(:port).to_s.empty?
+          options[:path]        =   config_variable(:path)                      unless config_variable(:path).to_s.empty?
+          options[:password]    =   config_variable(:password).gsub(/\@$/i, "") unless config_variable(:password).to_s.empty?
+          options[:db]          =   database unless database.to_s.empty?
+          
+          return options
+        end
     
         def redis_url(database:)
           connection_string     =   "redis://#{config_variable(:password)}#{config_variable(:host)}:#{config_variable(:port)}/#{database}"
         end
     
-        def configure_sessions(database: config_variable(:session_database).to_i, session_key: config_variable(:session_key), expire_in: 30.minutes)
-          Rails.application.config.session_store :redis_store,
-            redis_server:   redis_url(database: database),
-            key:            session_key,
-            expire_in:      expire_in
-        end
-    
-        def generate_cache_configuration(database: config_variable(:cache_database).to_i, expire_in: 1.hour)
-          {
-            connection_string:  redis_url(database: database),
-            options:            { expires_in: expire_in }
-          }
+        def generate_cache_configuration(database: config_variable(:cache_database).to_i)
+          return connection_options(database: database)
         end
     
         def configure_sidekiq(server_pool_size: config_variable(:pool_size).to_i, client_pool_size: 1)
@@ -33,11 +34,7 @@ module Configuration
         end
     
         def configure_sidekiq_instance(type: :server, database: config_variable(:sidekiq_database).to_i, pool_size: config_variable(:pool_size).to_i)
-          options   =   {
-            url:  redis_url(database: database),
-            size: pool_size,
-          }
-      
+          options   =   connection_options.merge(size: pool_size)
           Sidekiq.send("configure_#{type}") { |config| config.redis = options }
         end
       end
