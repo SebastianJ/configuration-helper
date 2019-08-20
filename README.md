@@ -27,15 +27,23 @@ Your config/credentials.yml.enc file is expected to have a structure similar to 
 ```yaml
 development:
   redis:
-    host: "localhost"
-    port: "6379"
-    pool_size: "55" # If Sidekiq is going to be used, this setting needs to be set higher than the concurrency setting in config/sidekiq.yml
-    session_key: "_app_session"
-    password: "" # If password is set, it has to end with @ for string concatenation to work properly
-    session_database: "0"
-    sidekiq_database: "1"
-    action_cable_database: "2"
-    cache_database: "3"
+    servers:
+      master:
+        host: "localhost"
+        port: "6379"
+        pool_size: "55" # If Sidekiq is going to be used, this setting needs to be set higher than the concurrency setting in config/sidekiq.yml
+        password: ""
+        namespace: "app_namespace"
+        sidekiq_database: "1"
+        action_cable_database: "2"
+      cache:
+        host: "localhost"
+        port: "6379" # Change to a different port if you have multiple instances set up (which you should have in production)
+        pool_size: "55" # If Sidekiq is going to be used, this setting needs to be set higher than the concurrency setting in config/sidekiq.yml
+        password: ""
+        namespace: "app_namespace"
+        cache_database: "3"
+        session_database: "4"
   
   memcached:
     host: "localhost"
@@ -48,19 +56,30 @@ development:
 ### Redis configuration
 To configure Redis to be used for sessions + job storage for Sidekiq:
 
-Create an initializer, e.g. config/initializers/redis.rb:
+Create a new initializer, e.g. config/initializers/sidekiq.rb:
 
 ```ruby
-::Configuration::Helper::Redis.configure_sessions
 ::Configuration::Helper::Redis.configure_sidekiq
 ```
 
-### Memcached configuration
-If you want to use Memcached for caching then the caching setup needs to happen in config/environments/{environment}.rb
+Create another initializer, e.g. config/initializers/session_store.rb:
 
-If done via an initializer Rails won't set up the caching functionality properly.
+```ruby
+Rails.application.config.session_store :cache_store, key: Rails.application.credentials[:secret_key_base], expire_after: 14.days
+```
 
-For each environment where caching using Memcached should be used:
+The above depends on the cache store being configured in the relevant environments.
+
+### Caching configuration
+The caching setup needs to happen in config/environments/{environment}.rb since initializer settings are picked up after the cache store is set.
+
+#### Redis
+
+```ruby
+config.cache_store = :redis_cache_store, ::Configuration::Helper::Redis.generate_cache_configuration(driver: :hiredis).merge(compress: true)
+```
+
+#### Memcached
 
 ```ruby
 Rails.application.config.cache_store = :dalli_store, ::Configuration::Helper::Memcached.config_variable(:host), ::Configuration::Helper::Memcached.generate_cache_configuration
