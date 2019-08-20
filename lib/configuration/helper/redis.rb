@@ -7,11 +7,16 @@ module Configuration
           ::Configuration::Helper::Utility.config_variable(:redis, var, default: default)
         end
         
-        def connection_options(database: nil)
+        def connection_options(driver: database: nil)
           options               =   {}
-          options[:host]        =   config_variable(:host)                      unless config_variable(:host).to_s.empty?
-          options[:port]        =   config_variable(:port)                      unless config_variable(:port).to_s.empty?
-          options[:path]        =   config_variable(:path)                      unless config_variable(:path).to_s.empty?
+          
+          if !config_variable(:path).to_s.empty?
+            options[:path]      =   config_variable(:path)
+          elsif !config_variable(:host).to_s.empty? && !config_variable(:port).to_s.empty?
+            options[:host]      =   config_variable(:host)
+            options[:port]      =   config_variable(:port)
+          end
+          
           options[:password]    =   config_variable(:password).gsub(/\@$/i, "") unless config_variable(:password).to_s.empty?
           options[:db]          =   database unless database.to_s.empty?
           
