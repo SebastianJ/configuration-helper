@@ -1,8 +1,8 @@
 # Configuration::Helper
 
-Configuration::Helper is just a collection of configuration helpers I tend to use for Rails app when setting up Redis, Memcached, Sidekiq etc.
+Configuration::Helper is a collection of configuration helpers for setting up Redis, Memcached, Sidekiq etc for a Ruby on Rails application.
 
-It relies on the new Rails 5.2+ credentials feature where it expects to find the relevant connection details / settings.
+It relies on the new Rails 5.2+ credentials feature and it expects a specific configuration format in order to successfully parse the appropriate settings.
 
 ## Installation
 
@@ -75,14 +75,20 @@ The caching setup needs to happen in config/environments/{environment}.rb since 
 
 #### Redis
 
+In config/environments/{development|production|test}.rb:
+
 ```ruby
 config.cache_store = :redis_cache_store, ::Configuration::Helper::Redis.generate_cache_configuration(driver: :hiredis).merge(compress: true)
 ```
 
 #### Memcached
 
+It's recommended to use the [dalli gem](https://github.com/petergoldstein/dalli) when using Memcached for caching (and/or sessions).
+
+In config/environments/{development|production|test}.rb:
+
 ```ruby
-Rails.application.config.cache_store = :dalli_store, ::Configuration::Helper::Memcached.config_variable(:host), ::Configuration::Helper::Memcached.generate_cache_configuration
+config.cache_store = :dalli_store, ::Configuration::Helper::Memcached.config_variable(:host), ::Configuration::Helper::Memcached.generate_cache_configuration
 ```
 
 ## Development
