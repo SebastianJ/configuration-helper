@@ -35,8 +35,8 @@ module Configuration
           return connection_string
         end
     
-        def generate_cache_configuration(driver: nil, server: :cache, namespace: nil, database: config_variable(:master, :cache_database)&.to_i)
-          return connection_options(driver: driver, server: server, namespace: namespace, database: database)
+        def generate_cache_configuration(driver: nil, server: :cache, database: config_variable(:master, :cache_database)&.to_i)
+          return connection_options(driver: driver, server: server, database: database)
         end
     
         def configure_sidekiq(server: :master, server_pool_size: config_variable(:master, :pool_size)&.to_i, client_pool_size: 1)
