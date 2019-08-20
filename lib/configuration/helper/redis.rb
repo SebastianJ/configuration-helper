@@ -7,12 +7,12 @@ module Configuration
           ::Configuration::Helper::Utility.config_variable(:redis, var, default: default)
         end
         
-        def connection_options(driver: nil, database: nil)
+        def connection_options(driver: nil, socket: nil, database: nil)
           options               =   {}
           options[:driver]      =   driver unless driver.to_s.empty?
           
-          if !config_variable(:path).to_s.empty?
-            options[:path]      =   config_variable(:path)
+          if !socket.to_s.empty?
+            options[:path]      =   socket
           elsif !config_variable(:host).to_s.empty? && !config_variable(:port).to_s.empty?
             options[:host]      =   config_variable(:host)
             options[:port]      =   config_variable(:port)
@@ -28,8 +28,8 @@ module Configuration
           connection_string     =   "redis://#{config_variable(:password)}#{config_variable(:host)}:#{config_variable(:port)}/#{database}"
         end
     
-        def generate_cache_configuration(database: config_variable(:cache_database).to_i)
-          return connection_options(database: database)
+        def generate_cache_configuration(socket: config_variable(:cache_socket), database: config_variable(:cache_database).to_i)
+          return connection_options(socket: socket, database: database)
         end
     
         def configure_sidekiq(server_pool_size: config_variable(:pool_size).to_i, client_pool_size: 1)
