@@ -7,8 +7,9 @@ module Configuration
           ::Configuration::Helper::Utility.config_variable(:redis, var, default: default)
         end
         
-        def connection_options(driver: database: nil)
+        def connection_options(driver: nil, database: nil)
           options               =   {}
+          options[:driver]      =   driver unless driver.to_s.empty?
           
           if !config_variable(:path).to_s.empty?
             options[:path]      =   config_variable(:path)
