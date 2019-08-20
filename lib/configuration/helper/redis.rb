@@ -28,8 +28,8 @@ module Configuration
           connection_string     =   "redis://#{config_variable(:password)}#{config_variable(:host)}:#{config_variable(:port)}/#{database}"
         end
     
-        def generate_cache_configuration(socket: config_variable(:cache_socket), database: config_variable(:cache_database).to_i)
-          return connection_options(socket: socket, database: database)
+        def generate_cache_configuration(driver: nil, socket: config_variable(:cache_socket), database: config_variable(:cache_database).to_i)
+          return connection_options(driver: driver, socket: socket, database: database)
         end
     
         def configure_sidekiq(server_pool_size: config_variable(:pool_size).to_i, client_pool_size: 1)
