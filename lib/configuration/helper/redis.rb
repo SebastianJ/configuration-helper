@@ -57,6 +57,8 @@ module Configuration
           options               =   connection_options(server: server, database: database).merge(size: pool_size)
           
           Sidekiq.send("configure_#{type}") { |config| config.redis = options }
+          
+          Rails.application.config.active_job.queue_adapter = :sidekiq
         end
       end
           
